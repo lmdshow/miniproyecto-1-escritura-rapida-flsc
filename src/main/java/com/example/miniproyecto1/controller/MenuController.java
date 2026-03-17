@@ -7,13 +7,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.animation.FadeTransition;
+import javafx.util.Duration;
 
 import java.io.IOException;
 
 public class MenuController {
+
+    @FXML
+    private Label hintLabel;
 
     @FXML
     private Button startButton;
@@ -27,6 +33,14 @@ public class MenuController {
         menuMusic = new MediaPlayer(media);
         menuMusic.setCycleCount(MediaPlayer.INDEFINITE);
         menuMusic.play();
+
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), hintLabel);
+
+        fadeTransition.setFromValue(0.0);
+        fadeTransition.setToValue(1.0);
+        fadeTransition.setCycleCount(FadeTransition.INDEFINITE);
+        fadeTransition.setAutoReverse(true);
+        fadeTransition.play();
     }
 
     @FXML

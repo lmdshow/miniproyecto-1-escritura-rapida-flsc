@@ -28,5 +28,10 @@
             </Button>
          </children>
       </VBox>
+      <Label fx:id="hintLabel" layoutX="82.0" layoutY="349.0" prefHeight="38.0" prefWidth="552.0" text="Dale clic a &quot;FIGHT&quot; para jugar" textFill="WHITE">
+         <font>
+            <Font name="Press Start 2P Regular" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
