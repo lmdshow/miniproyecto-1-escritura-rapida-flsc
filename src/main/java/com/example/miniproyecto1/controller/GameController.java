@@ -3,6 +3,7 @@ package com.example.miniproyecto1.controller;
 import com.example.miniproyecto1.controller.adapter.GameKeyHandler;
 import com.example.miniproyecto1.model.game.Game;
 import com.example.miniproyecto1.model.game.IGame;
+import com.example.miniproyecto1.util.AudioManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -17,6 +18,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -141,6 +144,13 @@ public class GameController {
 
     @FXML
     public void onHandleValidate(ActionEvent Su) {
+
+        String pathSound = getClass().getResource("/com/example/miniproyecto1/sounds/undertale-sound-effect.mp3").toExternalForm();
+        MediaPlayer buttonSound = new MediaPlayer(new Media(pathSound));
+        buttonSound.setCycleCount(1);
+        buttonSound.play();
+        AudioManager.stopCurrent();
+
         String text = wordTextField.getText();
         wordTextField.clear();
 
