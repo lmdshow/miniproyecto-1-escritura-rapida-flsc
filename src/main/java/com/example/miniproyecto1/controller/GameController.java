@@ -45,6 +45,7 @@ public class GameController {
     private IGame game;
     private Timeline timer;
     private int timeLeft;
+    private MediaPlayer validateSound;
 
     @FXML
     public void initialize() {
@@ -52,6 +53,8 @@ public class GameController {
         game.startGame();
         wordLabel.setText(game.generateWord());
         playerLevel.setText("LV " + game.getCurrentLevel());
+
+        validateSound = new MediaPlayer(new Media(getClass().getResource("/com/example/miniproyecto1/sounds/undertale-sound-effect.mp3").toExternalForm()));
         startTimer();
 
         wordTextField.setOnKeyPressed(new GameKeyHandler() {
@@ -62,6 +65,12 @@ public class GameController {
                 }
             }
         });
+    }
+
+    private void playValidateSound() {
+        validateSound.stop();
+        validateSound.seek(validateSound.getStartTime());
+        validateSound.play();
     }
 
     public void startTimer() {
@@ -144,12 +153,7 @@ public class GameController {
 
     @FXML
     public void onHandleValidate(ActionEvent Su) {
-
-        String pathSound = getClass().getResource("/com/example/miniproyecto1/sounds/undertale-sound-effect.mp3").toExternalForm();
-        MediaPlayer buttonSound = new MediaPlayer(new Media(pathSound));
-        buttonSound.setCycleCount(1);
-        buttonSound.play();
-        AudioManager.stopCurrent();
+        playValidateSound();
 
         String text = wordTextField.getText();
         wordTextField.clear();
