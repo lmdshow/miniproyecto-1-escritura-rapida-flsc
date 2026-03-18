@@ -55,6 +55,11 @@ public class GameController {
         playerLevel.setText("LV " + game.getCurrentLevel());
 
         validateSound = new MediaPlayer(new Media(getClass().getResource("/com/example/miniproyecto1/sounds/undertale-sound-effect.mp3").toExternalForm()));
+
+        String path = getClass().getResource(
+                "/com/example/miniproyecto1/sounds/start-menu.mp3").toExternalForm();
+        AudioManager.play(path, true);
+
         startTimer();
 
         wordTextField.setOnKeyPressed(new GameKeyHandler() {
@@ -135,6 +140,8 @@ public class GameController {
     }
 
     private void goToGameOver(String reason) {
+        AudioManager.stopCurrent();
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
                     "/com/example/miniproyecto1/game-over-view.fxml"));
