@@ -57,7 +57,7 @@ public class GameController {
         validateSound = new MediaPlayer(new Media(getClass().getResource("/com/example/miniproyecto1/sounds/undertale-sound-effect.mp3").toExternalForm()));
 
         String path = getClass().getResource(
-                "/com/example/miniproyecto1/sounds/start-menu.mp3").toExternalForm();
+                "/com/example/miniproyecto1/sounds/Home.mp3").toExternalForm();
         AudioManager.play(path, true);
 
         startTimer();

@@ -28,7 +28,7 @@ public class MenuController {
 
     @FXML
     public void initialize(){
-        String path = getClass().getResource("/com/example/miniproyecto1/sounds/Home.mp3").toExternalForm();
+        String path = getClass().getResource("/com/example/miniproyecto1/sounds/start-menu.mp3").toExternalForm();
         Media media = new Media(path);
         menuMusic = new MediaPlayer(media);
         menuMusic.setCycleCount(MediaPlayer.INDEFINITE);
