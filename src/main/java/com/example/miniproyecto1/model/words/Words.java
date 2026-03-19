@@ -3,15 +3,38 @@ package com.example.miniproyecto1.model.words;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Manages the word lists for Escritura Rapida, organized by difficulty level.
+ * Words are selected randomly without repetition within each difficulty tier.
+ * Implements the {@link IWords} interface.
+ *
+ * @author Frank Leonardo Silva Castillo
+ * @version 1.0
+ */
 public class Words implements IWords {
 
+    /** List of easy words for levels 1 to 14. */
     private final List<String> easyWords;
+
+    /** List of medium words for levels 15 to 29. */
     private final List<String> mediumWords;
+
+    /** List of hard words for levels 30 and above. */
     private final List<String> hardWords;
+
+    /** List of words already used in the current difficulty tier. */
     private final List<String> usedWords;
+
+    /** Tracks the last selected word list to detect difficulty changes. */
     private List<String> lastSelectedList;
 
-    public Words(){
+    /** The current word that the player must type. */
+    private String currentWord;
+
+    /**
+     * Constructs a new Words instance and loads all word lists.
+     */
+    public Words() {
         easyWords = new ArrayList<>();
         mediumWords = new ArrayList<>();
         hardWords = new ArrayList<>();
@@ -19,6 +42,9 @@ public class Words implements IWords {
         loadWords();
     }
 
+    /**
+     * Populates the easy, medium, and hard word lists with predefined words.
+     */
     private void loadWords() {
         easyWords.add("Luffy");
         easyWords.add("Zoro");
@@ -69,8 +95,14 @@ public class Words implements IWords {
         hardWords.add("JoyBoyLegacy");
     }
 
-    private String currentWord;
-
+    /**
+     * Generates a random word based on the given level without repeating words.
+     * Resets the used words list when all words in a tier have been used,
+     * or when the difficulty tier changes.
+     *
+     * @param level the current game level used to select the difficulty tier.
+     * @return a randomly selected non-repeated word as a String.
+     */
     @Override
     public String generateWord(int level) {
         List<String> selectedList;
@@ -96,11 +128,18 @@ public class Words implements IWords {
             int randomIndex = (int) (Math.random() * selectedList.size());
             word = selectedList.get(randomIndex);
         } while (usedWords.contains(word));
+
         usedWords.add(word);
         currentWord = word;
         return currentWord;
     }
 
+    /**
+     * Validates whether the given word matches the current word exactly.
+     *
+     * @param words the word typed by the player.
+     * @return true if the word matches the current word, false otherwise.
+     */
     @Override
     public Boolean validateWord(String words) {
         return words.equals(currentWord);

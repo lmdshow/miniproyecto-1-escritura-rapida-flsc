@@ -22,31 +22,51 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.IOException;
 
+/**
+ * Controller for the main game screen of Escritura Rapida.
+ * Manages the game timer, word display, player input validation,
+ * level progression, and navigation to the game over screen.
+ *
+ * @author Frank Leonardo Silva Castillo
+ * @version 1.0
+ */
 public class GameController {
 
-    @FXML
-    private Label wordLabel;
+    /** Label that displays the current word the player must type. */
+    @FXML private Label wordLabel;
 
-    @FXML
-    private Label timerLabel;
+    /** Label that displays the remaining time in seconds. */
+    @FXML private Label timerLabel;
 
-    @FXML
-    private Label playerLevel;
+    /** Label that displays the current player level. */
+    @FXML private Label playerLevel;
 
-    @FXML
-    private ProgressBar timeBar;
+    /** Progress bar that visually represents the remaining time. */
+    @FXML private ProgressBar timeBar;
 
-    @FXML
-    private TextField wordTextField;
+    /** Text field where the player types their answer. */
+    @FXML private TextField wordTextField;
 
+    /** The game model instance managing game logic. */
     private IGame game;
+
+    /** Timeline used as the countdown timer for each level. */
     private Timeline timer;
+
+    /** Remaining time in seconds for the current level. */
     private int timeLeft;
+
+    /** MediaPlayer preloaded with the validation sound effect. */
     private MediaPlayer validateSound;
 
+    /**
+     * Initializes the game controller.
+     * Sets up the game model, preloads the validation sound,
+     * starts background music, initializes the timer,
+     * and configures the keyboard event handler.
+     */
     @FXML
     public void initialize() {
         game = new Game();
@@ -54,7 +74,8 @@ public class GameController {
         wordLabel.setText(game.generateWord());
         playerLevel.setText("LV " + game.getCurrentLevel());
 
-        validateSound = new MediaPlayer(new Media(getClass().getResource("/com/example/miniproyecto1/sounds/undertale-sound-effect.mp3").toExternalForm()));
+        validateSound = new MediaPlayer(new Media(getClass().getResource(
+                "/com/example/miniproyecto1/sounds/undertale-sound-effect.mp3").toExternalForm()));
 
         String path = getClass().getResource(
                 "/com/example/miniproyecto1/sounds/Home.mp3").toExternalForm();
@@ -72,12 +93,20 @@ public class GameController {
         });
     }
 
+    /**
+     * Stops, rewinds, and plays the preloaded validation sound effect.
+     */
     private void playValidateSound() {
         validateSound.stop();
         validateSound.seek(validateSound.getStartTime());
         validateSound.play();
     }
 
+    /**
+     * Starts or restarts the countdown timer for the current level.
+     * Updates the progress bar and timer label every second.
+     * Triggers {@link #onTimeUp()} when time reaches zero.
+     */
     public void startTimer() {
         if (timer != null) {
             timer.stop();
@@ -90,7 +119,6 @@ public class GameController {
             timeLeft--;
             timeBar.setProgress((double) timeLeft / game.getTimeForLevel());
             timerLabel.setText(timeLeft + " segundos");
-
             if (timeLeft == 0) {
                 timer.stop();
                 onTimeUp();
@@ -101,6 +129,10 @@ public class GameController {
         timer.play();
     }
 
+    /**
+     * Handles the event triggered when the countdown timer reaches zero.
+     * Validates the typed word if any, and navigates to game over or next level accordingly.
+     */
     public void onTimeUp() {
         timer.stop();
         String text = wordTextField.getText();
@@ -109,11 +141,11 @@ public class GameController {
         if (!text.isEmpty() && game.validateWord(text)) {
             game.nextLevel();
             playerLevel.setText("LV " + game.getCurrentLevel());
-            wordLabel.setText("¡Correcto!");
+            wordLabel.setText("Correcto!");
 
             if (game.isMaxLevel()) {
                 PauseTransition pause = new PauseTransition(Duration.seconds(1));
-                pause.setOnFinished(Su -> goToGameOver("¡Completaste todos los niveles!"));
+                pause.setOnFinished(Su -> goToGameOver("Completaste todos los niveles!"));
                 pause.play();
                 return;
             }
@@ -126,22 +158,27 @@ public class GameController {
             pause.play();
 
         } else if (text.isEmpty()) {
-            wordLabel.setText("¡No escribiste nada!");
+            wordLabel.setText("No escribiste nada!");
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
-            pause.setOnFinished(Su -> goToGameOver("¡No escribiste nada!"));
+            pause.setOnFinished(Su -> goToGameOver("No escribiste nada!"));
             pause.play();
 
         } else {
-            wordLabel.setText("¡Incorrecto!");
+            wordLabel.setText("Incorrecto!");
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
-            pause.setOnFinished(Su -> goToGameOver("¡Tiempo agotado!"));
+            pause.setOnFinished(Su -> goToGameOver("Tiempo agotado!"));
             pause.play();
         }
     }
 
+    /**
+     * Navigates to the game over screen, passing the final stats to the controller.
+     * Stops all audio before switching scenes.
+     *
+     * @param reason the message describing why the game ended.
+     */
     private void goToGameOver(String reason) {
         AudioManager.stopCurrent();
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
                     "/com/example/miniproyecto1/game-over-view.fxml"));
@@ -158,22 +195,28 @@ public class GameController {
         }
     }
 
+    /**
+     * Handles the validate button action and Enter key press.
+     * Plays the validation sound, checks the typed word,
+     * and advances the level or navigates to game over accordingly.
+     *
+     * @param Su the action event triggered by the button or Enter key.
+     */
     @FXML
     public void onHandleValidate(ActionEvent Su) {
         playValidateSound();
-
         String text = wordTextField.getText();
         wordTextField.clear();
 
         if (game.validateWord(text)) {
             game.nextLevel();
             playerLevel.setText("LV " + game.getCurrentLevel());
-            wordLabel.setText("¡Correcto!");
+            wordLabel.setText("Correcto!");
             timer.stop();
 
             if (game.isMaxLevel()) {
                 PauseTransition pause = new PauseTransition(Duration.seconds(1));
-                pause.setOnFinished(Sua -> goToGameOver("¡Has Ganado el Juego!"));
+                pause.setOnFinished(Sua -> goToGameOver("Has Ganado el Juego!"));
                 pause.play();
                 return;
             }
@@ -186,11 +229,11 @@ public class GameController {
             pause.play();
 
         } else {
-            wordLabel.setText("¡Incorrecto!");
+            wordLabel.setText("Incorrecto!");
             timer.stop();
 
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
-            pause.setOnFinished(Sua -> goToGameOver("¡Palabra incorrecta!"));
+            pause.setOnFinished(Sua -> goToGameOver("Palabra incorrecta!"));
             pause.play();
         }
     }
