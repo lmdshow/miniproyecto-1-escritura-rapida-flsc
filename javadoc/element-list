@@ -1,0 +1,8 @@
+module:com.example.miniproyecto
+com.example.miniproyecto1
+com.example.miniproyecto1.controller
+com.example.miniproyecto1.controller.adapter
+com.example.miniproyecto1.model.game
+com.example.miniproyecto1.model.words
+com.example.miniproyecto1.util
+com.example.miniproyecto1.view
