@@ -22,7 +22,7 @@ public class Game implements IGame {
     private static final int TIME_REDUCTION = 2;
 
     /** Maximum number of levels in the game. */
-    private static final int MAX_LEVEL = 45;
+    private static final int MAX_LEVEL = 46;
 
     /** The current level the player is on. */
     private int currentLevel;
